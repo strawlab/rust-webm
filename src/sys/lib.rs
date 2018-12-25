@@ -49,7 +49,11 @@ pub mod mux {
         #[link_name = "mux_initialize_segment"]
         pub fn initialize_segment(segment: SegmentMutPtr, writer: WriterMutPtr) -> bool;
         pub fn mux_set_color(segment: VideoTrackMutPtr, bits: c_int, sampling_horiz: c_int, sampling_vert: c_int, full_range: c_int) -> c_int;
+        pub fn mux_set_duration(segment: SegmentMutPtr, duration: f64);
+        pub fn mux_set_muxing_app(segment: SegmentMutPtr, name: *const c_char);
+        pub fn mux_set_timecode_scale(segment: SegmentMutPtr, scale: u64);
         pub fn mux_set_writing_app(segment: SegmentMutPtr, name: *const c_char);
+        pub fn mux_set_date_utc(segment: SegmentMutPtr, date_utc: i64);
         #[link_name = "mux_finalize_segment"]
         pub fn finalize_segment(segment: SegmentMutPtr, duration: u64) -> bool;
         #[link_name = "mux_delete_segment"]

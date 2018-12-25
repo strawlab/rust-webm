@@ -91,9 +91,25 @@ extern "C" {
   bool mux_initialize_segment(MuxSegmentPtr segment, MkvWriterPtr writer) {
     return segment->Init(writer);
   }
+  void mux_set_duration(MuxSegmentPtr segment, double duration) {
+    auto info = segment->GetSegmentInfo();
+    info->set_duration(duration);
+  }
+  void mux_set_muxing_app(MuxSegmentPtr segment, const char *name) {
+    auto info = segment->GetSegmentInfo();
+    info->set_muxing_app(name);
+  }
+  void mux_set_timecode_scale(MuxSegmentPtr segment, uint64_t scale) {
+    auto info = segment->GetSegmentInfo();
+    info->set_timecode_scale(scale);
+  }
   void mux_set_writing_app(MuxSegmentPtr segment, const char *name) {
     auto info = segment->GetSegmentInfo();
     info->set_writing_app(name);
+  }
+  void mux_set_date_utc(MuxSegmentPtr segment, int64_t date_utc) {
+    auto info = segment->GetSegmentInfo();
+    info->set_date_utc(date_utc);
   }
   bool mux_finalize_segment(MuxSegmentPtr segment, uint64_t timeCodeDuration) {
     if (timeCodeDuration) {

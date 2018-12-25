@@ -203,6 +203,12 @@ pub mod mux {
             }
         }
 
+        pub fn set_date_utc(&mut self, date_utc: i64) {
+            unsafe {
+                ffi::mux::mux_set_date_utc(self.ffi, date_utc);
+            }
+        }
+
         pub fn add_video_track(&mut self, width: u32, height: u32,
                                id: Option<i32>, codec: VideoCodecId) -> VideoTrack
         {
