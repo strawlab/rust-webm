@@ -12,6 +12,50 @@
 
 extern "C" {
 
+  typedef mkvparser::IMkvReader* MkvReaderPtr;
+
+  struct FfiMkvReader: public mkvparser::IMkvReader {
+  public:
+    typedef bool (*ReadFun)(long long, long, unsigned char*);
+    typedef bool (*LengthFun)(long long*, long long*);
+
+    ReadFun              read_                = nullptr;
+    LengthFun            length_              = nullptr;
+
+    FfiMkvReader() = default;
+    virtual ~FfiMkvReader() = default;
+
+    int Read(long long pos, long len, unsigned char* buf) override final {
+      assert(this->read_ != nullptr);
+
+      return this->read_(pos, len, buf) ? 0 : 1;
+    }
+
+    int Length(long long* total, long long* available) override final {
+      assert(this->length_ != nullptr);
+
+      return this->length_(total, available) ? 0 : 1;
+    }
+
+  };
+
+  MkvReaderPtr parser_new_reader(FfiMkvReader::ReadFun read,
+                                 FfiMkvReader::LengthFun length) {
+      if(read == nullptr || length == nullptr) {
+        return nullptr;
+      }
+
+      FfiMkvReader* reader = new FfiMkvReader;
+      reader->read_ = read;
+      reader->length_ = length;
+
+      return static_cast<MkvReaderPtr>(reader);
+  }
+
+  void parser_delete_reader(MkvReaderPtr reader) {
+    delete static_cast<FfiMkvReader*>(reader);
+  }
+
   typedef mkvmuxer::IMkvWriter* MkvWriterPtr;
 
   struct FfiMkvWriter: public mkvmuxer::IMkvWriter {

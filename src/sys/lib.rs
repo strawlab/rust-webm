@@ -1,6 +1,14 @@
 
 pub mod mux {
-    use std::os::raw::{c_void, c_char, c_int};
+    use std::os::raw::{c_void, c_char, c_int, c_longlong, c_long};
+
+    pub type IReader = c_void;
+    pub type ReaderMutPtr = *mut IReader;
+
+    pub type ReaderReadFn = extern "C" fn(c_longlong,
+                                          c_long,
+                                          *mut c_char) -> bool;
+    pub type ReaderGetLengthFn = extern "C" fn(*mut c_longlong, *mut c_longlong) -> bool;
 
     pub type IWriter = c_void;
     pub type WriterMutPtr = *mut IWriter;
@@ -35,6 +43,12 @@ pub mod mux {
 
     #[link(name = "webmadapter", kind = "static")]
     extern "C" {
+        #[link_name = "parser_new_reader"]
+        pub fn new_reader(write: Option<ReaderReadFn>,
+                          get_length: Option<ReaderGetLengthFn>) -> ReaderMutPtr;
+        #[link_name = "parser_delete_reader"]
+        pub fn delete_reader(reader: ReaderMutPtr);
+
         #[link_name = "mux_new_writer"]
         pub fn new_writer(write: Option<WriterWriteFn>,
                           get_pos: Option<WriterGetPosFn>,
