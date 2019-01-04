@@ -16,11 +16,13 @@ extern "C" {
 
   struct FfiMkvReader: public mkvparser::IMkvReader {
   public:
-    typedef bool (*ReadFun)(long long, long, unsigned char*);
-    typedef bool (*LengthFun)(long long*, long long*);
+    typedef bool (*ReadFun)(void*, long long, long, unsigned char*);
+    typedef bool (*LengthFun)(void*, long long*, long long*);
 
     ReadFun              read_                = nullptr;
     LengthFun            length_              = nullptr;
+
+    mutable void* user_data = nullptr;
 
     FfiMkvReader() = default;
     virtual ~FfiMkvReader() = default;
@@ -28,19 +30,22 @@ extern "C" {
     int Read(long long pos, long len, unsigned char* buf) override final {
       assert(this->read_ != nullptr);
 
-      return this->read_(pos, len, buf) ? 0 : 1;
+      return this->read_(this->user_data, pos, len, buf) ? 0 : 1;
     }
 
+    // total size of the file and the
+    // amount of data immediately available for reading
     int Length(long long* total, long long* available) override final {
       assert(this->length_ != nullptr);
 
-      return this->length_(total, available) ? 0 : 1;
+      return this->length_(this->user_data, total, available) ? 0 : -1;
     }
 
   };
 
   MkvReaderPtr parser_new_reader(FfiMkvReader::ReadFun read,
-                                 FfiMkvReader::LengthFun length) {
+                                 FfiMkvReader::LengthFun length,
+                                 void* user_data) {
       if(read == nullptr || length == nullptr) {
         return nullptr;
       }
@@ -48,6 +53,7 @@ extern "C" {
       FfiMkvReader* reader = new FfiMkvReader;
       reader->read_ = read;
       reader->length_ = length;
+      reader->user_data = user_data;
 
       return static_cast<MkvReaderPtr>(reader);
   }

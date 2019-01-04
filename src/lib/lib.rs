@@ -1,6 +1,88 @@
 
 extern crate webm_sys as ffi;
 
+
+pub mod parser {
+    use ffi;
+    use std::os::raw::{c_void, c_longlong, c_long, c_char};
+
+    use std::io::{Read, Seek};
+
+    pub struct Reader<T>
+        where T: Read + Seek,
+    {
+        src: Box<T>,
+        mkv_reader: ffi::parser::ReaderMutPtr,
+    }
+
+    unsafe impl<T: Send + Read + Seek> Send for Reader<T> {}
+
+    impl<T> Reader<T>
+        where T: Read + Seek,
+    {
+        pub fn new(src: T) -> Reader<T> {
+            use std::slice::from_raw_parts_mut;
+            use std::mem::transmute;
+
+            // src.seek(std::io::SeekFrom::Start(0)).unwrap();
+
+            let mut r = Reader {
+                src: Box::new(src),
+                mkv_reader: 0 as ffi::mux::WriterMutPtr,
+            };
+
+            extern "C" fn read_fn<T>(src: *mut c_void,
+                                     pos: c_longlong,
+                                     len: c_long,
+                                     buf: *mut c_char) -> bool
+                where T: Read + Seek,
+            {
+                let src: &mut T = unsafe { transmute(src) };
+
+                match src.seek(std::io::SeekFrom::Start(pos as u64)) {
+                    Ok(_) => {},
+                    Err(_) => {
+                        return false;
+                    }
+                }
+
+                let buf = unsafe {
+                    from_raw_parts_mut(buf as *mut u8, len as usize)
+                };
+                src.read_exact(buf).is_ok()
+            }
+            extern "C" fn length_fn<T>(src: *mut c_void, total: *mut c_longlong, available: *mut c_longlong) -> bool
+                where T: Read + Seek,
+            {
+
+                let src: &mut T = unsafe { transmute(src) };
+
+                let cur_pos = src.seek(std::io::SeekFrom::Current(0)).unwrap();
+                let file_total = src.seek(std::io::SeekFrom::End(0)).unwrap();
+                src.seek(std::io::SeekFrom::Start(cur_pos)).unwrap();
+
+                // total size of the file and the
+                // amount of data immediately available for reading
+                unsafe {
+                    *total = file_total as c_longlong;
+                    *available = file_total as c_longlong;
+                }
+
+                true
+            }
+
+            r.mkv_reader = unsafe {
+                ffi::parser::new_reader(Some(read_fn::<T>),
+                                        Some(length_fn::<T>),
+                                        transmute(&mut *r.src))
+            };
+            debug_assert!(r.mkv_reader != 0 as *mut _);
+            r
+        }
+    }
+
+}
+
 pub mod mux {
     use ffi;
     use std::os::raw::c_void;
