@@ -1,0 +1,3 @@
+[submodule "src/sys/libwebm"]
+	path = src/sys/libwebm
+	url = https://bare-git.strawlab.org/libwebm.git
