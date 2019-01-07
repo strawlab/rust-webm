@@ -285,6 +285,7 @@ pub mod mux {
             }
         }
 
+        /// set DateUTC as nanoseconds from 0:00 on January 1st, 2001
         pub fn set_date_utc(&mut self, date_utc: i64) {
             unsafe {
                 ffi::mux::mux_set_date_utc(self.ffi, date_utc);
