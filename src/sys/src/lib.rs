@@ -42,6 +42,7 @@ pub mod mux {
     // video
     pub const VP8_CODEC_ID: u32 = 0;
     pub const VP9_CODEC_ID: u32 = 1;
+    pub const H264_CODEC_ID: u32 = 2;
 
     pub type Segment = c_void;
     pub type SegmentMutPtr = *mut Segment;

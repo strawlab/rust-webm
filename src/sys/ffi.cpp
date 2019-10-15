@@ -195,16 +195,19 @@ extern "C" {
   // video
   const uint32_t VP8_CODEC_ID = 0;
   const uint32_t VP9_CODEC_ID = 1;
+  const uint32_t H264_CODEC_ID = 2;
 
   MuxVideoTrackPtr mux_segment_add_video_track(MuxSegmentPtr segment, const int32_t width,
                                                const int32_t height, const int32_t number,
                                                const uint32_t codec_id) {
+
     if(segment == nullptr) { return nullptr; }
 
     const char* codec_id_str = nullptr;
     switch(codec_id) {
     case VP8_CODEC_ID: codec_id_str = mkvmuxer::Tracks::kVp8CodecId; break;
     case VP9_CODEC_ID: codec_id_str = mkvmuxer::Tracks::kVp9CodecId; break;
+    case H264_CODEC_ID: codec_id_str = mkvmuxer::Tracks::kH264CodecId; break;
     default: return nullptr;
     }
 

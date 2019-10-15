@@ -244,12 +244,14 @@ pub mod mux {
     pub enum VideoCodecId {
         VP8,
         VP9,
+        H264,
     }
     impl VideoCodecId {
         fn get_id(&self) -> u32 {
             match self {
                 &VideoCodecId::VP8 => ffi::mux::VP8_CODEC_ID,
                 &VideoCodecId::VP9 => ffi::mux::VP9_CODEC_ID,
+                &VideoCodecId::H264 => ffi::mux::H264_CODEC_ID,
             }
         }
     }
