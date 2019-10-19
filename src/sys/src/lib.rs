@@ -1,6 +1,6 @@
 
 pub mod parser {
-    use std::os::raw::{c_void, c_char, c_int, c_longlong, c_long};
+    use std::os::raw::{c_void, c_char, c_longlong, c_long};
 
     pub type IReader = c_void;
     pub type ReaderMutPtr = *mut IReader;
@@ -23,7 +23,7 @@ pub mod parser {
 }
 
 pub mod mux {
-    use std::os::raw::{c_void, c_char, c_int, c_longlong, c_long};
+    use std::os::raw::{c_void, c_char, c_int};
 
     pub type IWriter = c_void;
     pub type WriterMutPtr = *mut IWriter;
