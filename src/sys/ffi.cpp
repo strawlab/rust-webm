@@ -196,6 +196,10 @@ extern "C" {
   const uint32_t VP8_CODEC_ID = 0;
   const uint32_t VP9_CODEC_ID = 1;
   const uint32_t H264_CODEC_ID = 2;
+  const uint32_t H265_CODEC_ID = 3;
+  const uint32_t UNCOMPRESSED_CODEC_ID = 4;
+  const uint32_t FFV1_CODEC_ID = 5;
+  const uint32_t AV1_CODEC_ID = 6;
 
   MuxVideoTrackPtr mux_segment_add_video_track(MuxSegmentPtr segment, const int32_t width,
                                                const int32_t height, const int32_t number,
@@ -208,6 +212,10 @@ extern "C" {
     case VP8_CODEC_ID: codec_id_str = mkvmuxer::Tracks::kVp8CodecId; break;
     case VP9_CODEC_ID: codec_id_str = mkvmuxer::Tracks::kVp9CodecId; break;
     case H264_CODEC_ID: codec_id_str = "V_MPEG4/ISO/AVC"; break;
+    case H265_CODEC_ID: codec_id_str = "V_MPEGH/ISO/HEVC"; break;
+    case UNCOMPRESSED_CODEC_ID: codec_id_str = "V_UNCOMPRESSED"; break;
+    case FFV1_CODEC_ID: codec_id_str = "V_FFV1"; break;
+    case AV1_CODEC_ID: codec_id_str = "V_AV1"; break;
     default: return nullptr;
     }
 

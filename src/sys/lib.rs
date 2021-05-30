@@ -43,6 +43,10 @@ pub mod mux {
     pub const VP8_CODEC_ID: u32 = 0;
     pub const VP9_CODEC_ID: u32 = 1;
     pub const H264_CODEC_ID: u32 = 2;
+    pub const H265_CODEC_ID: u32 = 3;
+    pub const UNCOMPRESSED_CODEC_ID: u32 = 4;
+    pub const FFV1_CODEC_ID: u32 = 5;
+    pub const AV1_CODEC_ID: u32 = 6;
 
     pub type Segment = c_void;
     pub type SegmentMutPtr = *mut Segment;

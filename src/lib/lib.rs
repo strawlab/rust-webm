@@ -243,6 +243,10 @@ pub mod mux {
         VP8,
         VP9,
         H264,
+        H265,
+        Uncompressed,
+        FFV1,
+        AV1,
     }
     impl VideoCodecId {
         fn get_id(&self) -> u32 {
@@ -250,6 +254,10 @@ pub mod mux {
                 VideoCodecId::VP8 => ffi::mux::VP8_CODEC_ID,
                 VideoCodecId::VP9 => ffi::mux::VP9_CODEC_ID,
                 VideoCodecId::H264 => ffi::mux::H264_CODEC_ID,
+                VideoCodecId::H265 => ffi::mux::H265_CODEC_ID,
+                VideoCodecId::Uncompressed => ffi::mux::UNCOMPRESSED_CODEC_ID,
+                VideoCodecId::FFV1 => ffi::mux::FFV1_CODEC_ID,
+                VideoCodecId::AV1 => ffi::mux::AV1_CODEC_ID,
             }
         }
     }
