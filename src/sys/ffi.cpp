@@ -207,7 +207,7 @@ extern "C" {
     switch(codec_id) {
     case VP8_CODEC_ID: codec_id_str = mkvmuxer::Tracks::kVp8CodecId; break;
     case VP9_CODEC_ID: codec_id_str = mkvmuxer::Tracks::kVp9CodecId; break;
-    case H264_CODEC_ID: codec_id_str = mkvmuxer::Tracks::kH264CodecId; break;
+    case H264_CODEC_ID: codec_id_str = "V_MPEG4/ISO/AVC"; break;
     default: return nullptr;
     }
 
