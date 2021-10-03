@@ -286,6 +286,12 @@ pub mod mux {
             })
         }
 
+        pub fn set_timecode_scale(&mut self, scale: u64) {
+            unsafe {
+                ffi::mux::mux_set_timecode_scale(self.ffi, scale);
+            }
+        }
+
         pub fn set_app_name(&mut self, name: &str) {
             let name = std::ffi::CString::new(name).unwrap();
             unsafe {
