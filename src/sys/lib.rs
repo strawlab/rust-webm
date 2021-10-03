@@ -1,36 +1,33 @@
-
 pub mod parser {
-    use std::os::raw::{c_void, c_char, c_longlong, c_long};
+    use std::os::raw::{c_char, c_long, c_longlong, c_void};
 
     pub type IReader = c_void;
     pub type ReaderMutPtr = *mut IReader;
 
-    pub type ReaderReadFn = extern "C" fn(*mut c_void,
-                                          c_longlong,
-                                          c_long,
-                                          *mut c_char) -> bool;
-    pub type ReaderGetLengthFn = extern "C" fn(*mut c_void, *mut c_longlong, *mut c_longlong) -> bool;
+    pub type ReaderReadFn = extern "C" fn(*mut c_void, c_longlong, c_long, *mut c_char) -> bool;
+    pub type ReaderGetLengthFn =
+        extern "C" fn(*mut c_void, *mut c_longlong, *mut c_longlong) -> bool;
 
     #[link(name = "webmadapter", kind = "static")]
     extern "C" {
         #[link_name = "parser_new_reader"]
-        pub fn new_reader(write: Option<ReaderReadFn>,
-                          get_length: Option<ReaderGetLengthFn>,
-                          user_data: *mut c_void) -> ReaderMutPtr;
+        pub fn new_reader(
+            write: Option<ReaderReadFn>,
+            get_length: Option<ReaderGetLengthFn>,
+            user_data: *mut c_void,
+        ) -> ReaderMutPtr;
         #[link_name = "parser_delete_reader"]
         pub fn delete_reader(reader: ReaderMutPtr);
     }
 }
 
 pub mod mux {
-    use std::os::raw::{c_void, c_char, c_int};
+    use std::os::raw::{c_char, c_int, c_void};
 
     pub type IWriter = c_void;
     pub type WriterMutPtr = *mut IWriter;
 
-    pub type WriterWriteFn = extern "C" fn(*mut c_void,
-                                           *const c_void,
-                                           usize) -> bool;
+    pub type WriterWriteFn = extern "C" fn(*mut c_void, *const c_void, usize) -> bool;
     pub type WriterGetPosFn = extern "C" fn(*mut c_void) -> u64;
     pub type WriterSetPosFn = extern "C" fn(*mut c_void, u64) -> bool;
     pub type WriterElementStartNotifyFn = extern "C" fn(*mut c_void, u64, i64);
@@ -60,15 +57,16 @@ pub mod mux {
     pub type AudioTrack = c_void;
     pub type AudioTrackMutPtr = *mut AudioTrack;
 
-
     #[link(name = "webmadapter", kind = "static")]
     extern "C" {
         #[link_name = "mux_new_writer"]
-        pub fn new_writer(write: Option<WriterWriteFn>,
-                          get_pos: Option<WriterGetPosFn>,
-                          set_pos: Option<WriterSetPosFn>,
-                          element_start_notify: Option<WriterElementStartNotifyFn>,
-                          user_data: *mut c_void) -> WriterMutPtr;
+        pub fn new_writer(
+            write: Option<WriterWriteFn>,
+            get_pos: Option<WriterGetPosFn>,
+            set_pos: Option<WriterSetPosFn>,
+            element_start_notify: Option<WriterElementStartNotifyFn>,
+            user_data: *mut c_void,
+        ) -> WriterMutPtr;
         #[link_name = "mux_delete_writer"]
         pub fn delete_writer(writer: WriterMutPtr);
 
@@ -76,7 +74,13 @@ pub mod mux {
         pub fn new_segment() -> SegmentMutPtr;
         #[link_name = "mux_initialize_segment"]
         pub fn initialize_segment(segment: SegmentMutPtr, writer: WriterMutPtr) -> bool;
-        pub fn mux_set_color(segment: VideoTrackMutPtr, bits: c_int, sampling_horiz: c_int, sampling_vert: c_int, full_range: c_int) -> c_int;
+        pub fn mux_set_color(
+            segment: VideoTrackMutPtr,
+            bits: c_int,
+            sampling_horiz: c_int,
+            sampling_vert: c_int,
+            full_range: c_int,
+        ) -> c_int;
         pub fn mux_set_duration(segment: SegmentMutPtr, duration: f64);
         pub fn mux_set_muxing_app(segment: SegmentMutPtr, name: *const c_char);
         pub fn mux_set_timecode_scale(segment: SegmentMutPtr, scale: u64);
@@ -93,18 +97,30 @@ pub mod mux {
         pub fn audio_track_base_mut(track: AudioTrackMutPtr) -> TrackMutPtr;
 
         #[link_name = "mux_segment_add_video_track"]
-        pub fn segment_add_video_track(segment: SegmentMutPtr,
-                                       width: i32, height: i32,
-                                       number: i32, codec_id: u32) -> VideoTrackMutPtr;
+        pub fn segment_add_video_track(
+            segment: SegmentMutPtr,
+            width: i32,
+            height: i32,
+            number: i32,
+            codec_id: u32,
+        ) -> VideoTrackMutPtr;
         #[link_name = "mux_segment_add_audio_track"]
-        pub fn segment_add_audio_track(segment: SegmentMutPtr,
-                                       sample_rate: i32, channels: i32,
-                                       number: i32, codec_id: u32) -> AudioTrackMutPtr;
+        pub fn segment_add_audio_track(
+            segment: SegmentMutPtr,
+            sample_rate: i32,
+            channels: i32,
+            number: i32,
+            codec_id: u32,
+        ) -> AudioTrackMutPtr;
         #[link_name = "mux_segment_add_frame"]
-        pub fn segment_add_frame(segment: SegmentMutPtr,
-                                 track: TrackMutPtr,
-                                 frame: *const u8, length: usize,
-                                 timestamp_ns: u64, keyframe: bool) -> bool;
+        pub fn segment_add_frame(
+            segment: SegmentMutPtr,
+            track: TrackMutPtr,
+            frame: *const u8,
+            length: usize,
+            timestamp_ns: u64,
+            keyframe: bool,
+        ) -> bool;
     }
 }
 
