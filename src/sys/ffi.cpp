@@ -157,6 +157,10 @@ extern "C" {
     auto info = segment->GetSegmentInfo();
     info->set_writing_app(name);
   }
+  void mux_set_title(MuxSegmentPtr segment, const char *title) {
+    auto info = segment->GetSegmentInfo();
+    info->set_title(title);
+  }
   void mux_set_date_utc(MuxSegmentPtr segment, int64_t date_utc) {
     auto info = segment->GetSegmentInfo();
     info->set_date_utc(date_utc);

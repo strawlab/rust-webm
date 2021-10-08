@@ -335,6 +335,13 @@ pub mod mux {
             }
         }
 
+        pub fn set_title(&mut self, title: &str) {
+            let title = std::ffi::CString::new(title).unwrap();
+            unsafe {
+                ffi::mux::mux_set_title(self.ffi, title.as_ptr());
+            }
+        }
+
         /// set DateUTC as nanoseconds from 0:00 on January 1st, 2001
         pub fn set_date_utc(&mut self, date_utc: i64) {
             unsafe {

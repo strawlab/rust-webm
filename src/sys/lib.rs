@@ -85,6 +85,7 @@ pub mod mux {
         pub fn mux_set_muxing_app(segment: SegmentMutPtr, name: *const c_char);
         pub fn mux_set_timecode_scale(segment: SegmentMutPtr, scale: u64);
         pub fn mux_set_writing_app(segment: SegmentMutPtr, name: *const c_char);
+        pub fn mux_set_title(segment: SegmentMutPtr, title: *const c_char);
         pub fn mux_set_date_utc(segment: SegmentMutPtr, date_utc: i64);
         #[link_name = "mux_finalize_segment"]
         pub fn finalize_segment(segment: SegmentMutPtr, duration: u64) -> bool;
