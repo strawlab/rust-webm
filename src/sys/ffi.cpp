@@ -207,7 +207,7 @@ extern "C" {
 
   MuxVideoTrackPtr mux_segment_add_video_track(MuxSegmentPtr segment, const int32_t width,
                                                const int32_t height, const int32_t number,
-                                               const uint32_t codec_id) {
+                                               const uint32_t codec_id, const char* uncompressed_four_cc) {
 
     if(segment == nullptr) { return nullptr; }
 
@@ -228,6 +228,9 @@ extern "C" {
 
     auto video = static_cast<MuxVideoTrackPtr>(segment->GetTrackByNumber(id));
     video->set_codec_id(codec_id_str);
+    if (uncompressed_four_cc != nullptr) {
+      video->set_colour_space(uncompressed_four_cc);
+    }
 
     return video;
   }

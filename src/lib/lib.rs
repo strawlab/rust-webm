@@ -355,7 +355,17 @@ pub mod mux {
             height: u32,
             id: Option<i32>,
             codec: VideoCodecId,
+            uncompressed_four_cc: Option<[u8; 4]>,
         ) -> VideoTrack {
+            let alloced = match uncompressed_four_cc {
+                None => None,
+                Some(x) => Some(std::ffi::CString::new(x).unwrap()),
+            };
+            let ptr = match alloced {
+                None => std::ptr::null(),
+                Some(a) => a.into_raw(),
+            };
+
             let vt = unsafe {
                 ffi::mux::segment_add_video_track(
                     self.ffi,
@@ -363,6 +373,7 @@ pub mod mux {
                     height as i32,
                     id.unwrap_or(0),
                     codec.get_id(),
+                    ptr,
                 )
             };
             VideoTrack(self.ffi, vt)

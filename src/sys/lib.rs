@@ -104,6 +104,7 @@ pub mod mux {
             height: i32,
             number: i32,
             codec_id: u32,
+            uncompressed_four_cc: *const c_char,
         ) -> VideoTrackMutPtr;
         #[link_name = "mux_segment_add_audio_track"]
         pub fn segment_add_audio_track(
