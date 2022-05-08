@@ -266,6 +266,10 @@ extern "C" {
     return video->SetColour(color);
   }
 
+  void mux_set_gamma(MuxVideoTrackPtr video, double gamma) {
+    video->set_gamma_value(gamma);
+  }
+
   bool mux_segment_add_frame(MuxSegmentPtr segment, MuxTrackPtr track,
                              const uint8_t* frame, const size_t length,
                              const uint64_t timestamp_ns, const bool keyframe) {

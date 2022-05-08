@@ -81,6 +81,7 @@ pub mod mux {
             sampling_vert: c_int,
             full_range: c_int,
         ) -> c_int;
+        pub fn mux_set_gamma(segment: VideoTrackMutPtr, gamma: f64);
         pub fn mux_set_duration(segment: SegmentMutPtr, duration: f64);
         pub fn mux_set_muxing_app(segment: SegmentMutPtr, name: *const c_char);
         pub fn mux_set_timecode_scale(segment: SegmentMutPtr, scale: u64);

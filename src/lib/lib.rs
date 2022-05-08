@@ -209,6 +209,10 @@ pub mod mux {
         fn get_track(&self) -> ffi::mux::TrackMutPtr;
     }
     impl VideoTrack {
+        pub fn set_gamma(&mut self, gamma: f64) {
+            unsafe { ffi::mux::mux_set_gamma(self.get_track(), gamma) }
+        }
+
         pub fn set_color(
             &mut self,
             bit_depth: u8,
