@@ -255,7 +255,7 @@ extern "C" {
     return audio;
   }
 
-  int mux_set_color(MuxVideoTrackPtr video, int bits, int sampling_horiz, int sampling_vert, int full_range) {
+  int mux_set_color(MuxVideoTrackPtr video, uint64_t bits, uint64_t sampling_horiz, uint64_t sampling_vert, uint64_t full_range) {
     mkvmuxer::Colour color;
 
     color.set_bits_per_channel(bits);

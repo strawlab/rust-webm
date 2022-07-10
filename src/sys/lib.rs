@@ -76,10 +76,10 @@ pub mod mux {
         pub fn initialize_segment(segment: SegmentMutPtr, writer: WriterMutPtr) -> bool;
         pub fn mux_set_color(
             segment: VideoTrackMutPtr,
-            bits: c_int,
-            sampling_horiz: c_int,
-            sampling_vert: c_int,
-            full_range: c_int,
+            bits: u64,
+            sampling_horiz: u64,
+            sampling_vert: u64,
+            full_range: u64,
         ) -> c_int;
         pub fn mux_set_gamma(segment: VideoTrackMutPtr, gamma: f64);
         pub fn mux_set_duration(segment: SegmentMutPtr, duration: f64);

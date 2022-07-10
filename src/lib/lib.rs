@@ -220,7 +220,7 @@ pub mod mux {
             full_range: bool,
         ) -> bool {
             let (sampling_horiz, sampling_vert) = subsampling;
-            fn to_int(b: bool) -> i32 {
+            fn to_int(b: bool) -> u64 {
                 if b {
                     1
                 } else {
