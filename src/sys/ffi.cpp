@@ -270,6 +270,13 @@ extern "C" {
     video->set_gamma_value(gamma);
   }
 
+  bool mux_set_colour_matrix_coefficients_id(MuxVideoTrackPtr video, uint64_t c) {
+    mkvmuxer::Colour* cptr = video->colour();
+    if (cptr==nullptr) {return false;}
+    cptr->set_matrix_coefficients(c);
+    return true;
+  }
+
   bool mux_segment_add_frame(MuxSegmentPtr segment, MuxTrackPtr track,
                              const uint8_t* frame, const size_t length,
                              const uint64_t timestamp_ns, const bool keyframe) {

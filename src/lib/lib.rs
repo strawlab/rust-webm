@@ -213,6 +213,23 @@ pub mod mux {
             unsafe { ffi::mux::mux_set_gamma(self.get_track(), gamma) }
         }
 
+        /// Set the colour matrix coefficients.
+        ///
+        /// Note that this requires a previous call to `set_colour` to succeed.
+        ///
+        /// Returns true on success and false on failure.
+        pub fn set_colour_matrix_coefficients(
+            &mut self,
+            colour_matrix_coefficients_id: ColourMatrixCoefficients,
+        ) -> bool {
+            unsafe {
+                ffi::mux::mux_set_colour_matrix_coefficients_id(
+                    self.get_track(),
+                    colour_matrix_coefficients_id.as_u64(),
+                )
+            }
+        }
+
         pub fn set_color(
             &mut self,
             bit_depth: u8,
@@ -264,6 +281,42 @@ pub mod mux {
         #[doc(hidden)]
         fn get_track(&self) -> ffi::mux::TrackMutPtr {
             unsafe { ffi::mux::audio_track_base_mut(self.1) }
+        }
+    }
+
+    #[derive(Eq, PartialEq, Clone, Copy, Debug)]
+    pub enum ColourMatrixCoefficients {
+        Gbr,
+        Bt709,
+        UnspecifiedMc,
+        Reserved,
+        Fcc,
+        Bt470bg,
+        Smpte170MMc,
+        Smpte240MMc,
+        Ycocg,
+        Bt2020NonConstantLuminance,
+        Bt2020ConstantLuminance,
+    }
+
+    impl ColourMatrixCoefficients {
+        fn as_u64(&self) -> u64 {
+            // kMkvMatrixCoefficients
+            // see Colour::MatrixCoefficients in mkvmuxer.h
+            use ColourMatrixCoefficients::*;
+            match self {
+                Gbr => 0,
+                Bt709 => 1,
+                UnspecifiedMc => 2,
+                Reserved => 3,
+                Fcc => 4,
+                Bt470bg => 5,
+                Smpte170MMc => 6,
+                Smpte240MMc => 7,
+                Ycocg => 8,
+                Bt2020NonConstantLuminance => 9,
+                Bt2020ConstantLuminance => 10,
+            }
         }
     }
 
